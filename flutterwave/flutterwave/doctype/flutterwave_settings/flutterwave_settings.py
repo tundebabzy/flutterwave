@@ -8,6 +8,7 @@ import frappe
 from frappe import _
 from frappe.integrations.utils import create_payment_gateway, create_request_log
 from frappe.model.document import Document
+from frappe.utils.background_jobs import enqueue
 from frappe.utils import call_hook_method, nowdate, get_url
 from requests import RequestException, ConnectionError
 from flutterwave import pyflutterwave
@@ -92,7 +93,11 @@ def payment_done(tx_ref=None, transaction_id=None, status=None):
 	elif not tx_ref or not transaction_id:
 		frappe.response['http_status_code'] = 404
 	else:
-		do_payment_done(tx_ref, transaction_id, status)
+		params = {
+			'tx_ref': tx_ref, 'transaction_id': transaction_id,
+			'status': status
+		}
+		enqueue(method=do_payment_done, job_name=transaction_id, timeout=60, **params)
 		frappe.response['http_status_code'] = 200
 		frappe.response['type'] = 'redirect'
 		frappe.response.location = '/success'
