@@ -79,7 +79,6 @@ class Payment(object):
             'payment_plan': payment_plan, 'subaccounts': subaccounts,
             'meta': meta
         })
-        print(params)
 
         self.ctx.post(self.url, json=params)
 
@@ -108,5 +107,5 @@ class TransactionVerification(object):
         self.__url = self.__url_prefix + '/{0}/verify'.format(value)
 
     def verify(self, tx_id):
-        self.url(tx_id)
-        self.ctx.get(self.url, json=params)
+        self.url = tx_id
+        self.ctx.get(self.url)
