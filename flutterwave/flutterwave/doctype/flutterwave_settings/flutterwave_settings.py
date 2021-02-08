@@ -5,7 +5,6 @@
 from __future__ import unicode_literals
 
 import frappe
-import paystakk
 from frappe import _
 from frappe.integrations.utils import create_payment_gateway, create_request_log
 from frappe.model.document import Document
@@ -41,7 +40,7 @@ class FlutterwaveSettings(Document):
 						 ' you have a working internet connection.')
 
 		if not Flutterwave.ctx.status.lower() == 'success':
-			frappe.throw(api.ctx.message, title=_("Failed Credentials Validation"))
+			frappe.throw(Flutterwave.ctx.message, title=_("Failed Credentials Validation"))
 
 	def validate_transaction_currency(self, currency):
 		if currency not in self.supported_currencies:
@@ -49,15 +48,15 @@ class FlutterwaveSettings(Document):
 				_('{0} is not supported by Flutterwave at the moment.').format(currency))
 
 	def get_payment_url(self, **kwargs):
-		amount = kwargs.get('amount')
+		amount = str(kwargs.get('amount'))
 		description = kwargs.get('description')
 		slug = kwargs.get('reference_docname')
 		email = kwargs.get('payer_email')
-		identifier = hash('{0}{1}{2}'.format(amount, description, slug))
+		identifier = str(hash('{0}{1}{2}'.format(amount, description, slug)))
 		metadata = {
 			'payment_request': kwargs.get('order_id'),
 			'customer_name': kwargs.get('payer_name'),
-			'identifier': identifier
+			'identifier': str(identifier)
 		}
 		customer = {'email': email}
 		customizations = {"title": 'Payment request: {0}'.format(slug)}
@@ -88,25 +87,20 @@ class FlutterwaveSettings(Document):
 
 @frappe.whitelist(allow_guest=True)
 def payment_done(tx_ref=None, transaction_id=None, status=None):
-	if not status == 'successful':
+	if status != 'successful':
 		frappe.response['http_status_code'] = 404
-	if not tx_ref or not transaction_id:
+	elif not tx_ref or not transaction_id:
 		frappe.response['http_status_code'] = 404
-	if tx_ref and transaction_id and status:
+	else:
 		do_payment_done(tx_ref, transaction_id, status)
 		frappe.response['http_status_code'] = 200
 		return """
-		<p>Payment was successful. Thank you. You can close the window.</p>
+		<p>Thank you. We have received your payment</p>
 		"""
 	return
 
 def do_payment_done(tx_ref, transaction_id, status):
-	link_log = frappe.get_doc('Payment Link Log', tx_ref)
-	settings = frappe.get_doc('Flutterwave Settings', link_log.controller)
-	secret_key = settings.get_password(fieldname='secret_key', raise_exception=False)
-	Flutterwave = pyflutterwave.TransactionVerification(secret_key=secret_key, public_key=settings.public_key)
-	Flutterwave.verify(transaction_id)
-	print (Flutterwave.ctx.data)
-
-def queue_do_payment_done(tx_ref, transaction_id, status):
-	pass
+	try:
+		call_hook_method('on_payment_authorized', tx_ref=tx_ref, transaction_id=transaction_id, status=status)
+	except Exception as e:
+		print(e)
