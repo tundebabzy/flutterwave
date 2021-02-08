@@ -88,11 +88,7 @@ class FlutterwaveSettings(Document):
 
 @frappe.whitelist(allow_guest=True)
 def payment_done(tx_ref=None, transaction_id=None, status=None):
-	if status != 'successful':
-		frappe.response['http_status_code'] = 404
-	elif not tx_ref or not transaction_id:
-		frappe.response['http_status_code'] = 404
-	else:
+	if status == 'successful' and tx_ref and transaction_id:
 		params = {
 			'tx_ref': tx_ref, 'transaction_id': transaction_id,
 			'status': status
@@ -101,6 +97,10 @@ def payment_done(tx_ref=None, transaction_id=None, status=None):
 		frappe.response['http_status_code'] = 200
 		frappe.response['type'] = 'redirect'
 		frappe.response.location = '/success'
+	else:
+		# purposely left empty as nobody is ever supposed to get to this branch
+		frappe.response['type'] = 'redirect'
+		frappe.response.location = '/message'
 	return
 
 def do_payment_done(tx_ref, transaction_id, status):
