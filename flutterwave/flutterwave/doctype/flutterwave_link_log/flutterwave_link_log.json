@@ -7,7 +7,8 @@
  "field_order": [
   "tx_ref",
   "ref",
-  "controller"
+  "controller",
+  "checkout_link"
  ],
  "fields": [
   {
@@ -20,8 +21,17 @@
   {
    "fieldname": "ref",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Reference Request",
    "options": "Payment Request",
+   "read_only": 1
+  },
+  {
+   "fieldname": "checkout_link",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Checkout link",
+   "no_copy": 1,
    "read_only": 1
   },
   {
@@ -32,7 +42,7 @@
    "read_only": 1
   }
  ],
- "modified": "2021-02-08 13:59:08.450068",
+ "modified": "2021-02-08 17:33:14.761695",
  "modified_by": "Administrator",
  "module": "Flutterwave",
  "name": "Flutterwave Link Log",
@@ -49,15 +59,6 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
-  },
-  {
-   "email": 1,
-   "export": 1,
-   "print": 1,
-   "read": 1,
-   "report": 1,
-   "role": "Guest",
-   "share": 1
   }
  ],
  "quick_entry": 1,

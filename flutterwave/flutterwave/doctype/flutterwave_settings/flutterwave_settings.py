@@ -75,15 +75,17 @@ class FlutterwaveSettings(Document):
 		if not Flutterwave.ctx.status == 'success':
 			frappe.throw(Flutterwave.ctx.message)
 		else:
+			checkout_link = Flutterwave.ctx.data['link']
 			print('got a link -> ', Flutterwave.ctx.data, Flutterwave.ctx.message, Flutterwave.ctx.status)
-			self.make_log(identifier, slug)
-			return Flutterwave.ctx.data['link']
+			self.make_log(identifier, slug, checkout_link)
+			return checkout_link
 
-	def make_log(self, tx_ref, ref_docname):
+	def make_log(self, tx_ref, ref_docname, checkout_link):
 		link_log = frappe.new_doc('Flutterwave Link Log')
 		link_log.ref = ref_docname
 		link_log.tx_ref = tx_ref
 		link_log.controller = self.name
+		link_log.checkout_link = checkout_link
 		link_log.insert()
 
 @frappe.whitelist(allow_guest=True)
