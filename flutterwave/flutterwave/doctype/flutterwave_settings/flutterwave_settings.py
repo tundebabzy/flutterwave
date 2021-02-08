@@ -71,7 +71,7 @@ class FlutterwaveSettings(Document):
 			redirect_url=redirect_url, customer=customer, customizations=customizations,
 			meta=metadata
 		)
-		# self.integration_request = create_request_log(kwargs, "Host", "Flutterwave")
+
 		if not Flutterwave.ctx.status == 'success':
 			frappe.throw(Flutterwave.ctx.message)
 		else:
@@ -96,11 +96,11 @@ def payment_done(tx_ref=None, transaction_id=None, status=None):
 		enqueue(method=do_payment_done, job_name=transaction_id, timeout=60, **params)
 		frappe.response['http_status_code'] = 200
 		frappe.response['type'] = 'redirect'
-		frappe.response.location = '/success'
+		frappe.response.location = '/thankyou'
 	else:
 		# purposely left empty as nobody is ever supposed to get to this branch
 		frappe.response['type'] = 'redirect'
-		frappe.response.location = '/message'
+		frappe.response.location = '/message'		
 	return
 
 def do_payment_done(tx_ref, transaction_id, status):
