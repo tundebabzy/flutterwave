@@ -89,7 +89,8 @@ app_license = "MIT"
 # 		"on_cancel": "method",
 # 		"on_trash": "method"
 #	}
-# }
+# }str(tx_ref)
+on_payment_authorized = 'flutterwave.handlers.on_payment_authorized'
 
 # Scheduled Tasks
 # ---------------
