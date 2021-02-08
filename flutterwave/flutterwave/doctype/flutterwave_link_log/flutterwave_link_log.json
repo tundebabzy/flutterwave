@@ -1,5 +1,4 @@
 {
- "actions": [],
  "autoname": "field:tx_ref",
  "creation": "2021-02-08 08:51:55.758101",
  "doctype": "DocType",
@@ -29,11 +28,11 @@
    "fieldname": "controller",
    "fieldtype": "Link",
    "label": "Controller",
-   "options": "Flutterwave Settings"
+   "options": "Flutterwave Settings",
+   "read_only": 1
   }
  ],
- "links": [],
- "modified": "2021-02-08 08:59:05.872553",
+ "modified": "2021-02-08 13:59:08.450068",
  "modified_by": "Administrator",
  "module": "Flutterwave",
  "name": "Flutterwave Link Log",
@@ -50,6 +49,15 @@
    "role": "System Manager",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Guest",
+   "share": 1
   }
  ],
  "quick_entry": 1,
