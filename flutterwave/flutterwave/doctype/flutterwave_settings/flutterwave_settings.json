@@ -8,6 +8,7 @@
  "field_order": [
   "gateway_name",
   "section_break_2",
+  "merchant_id",
   "public_key",
   "secret_key",
   "company_image"
@@ -42,10 +43,16 @@
    "fieldname": "company_image",
    "fieldtype": "Attach Image",
    "label": "Company Image"
+  },
+  {
+   "fieldname": "merchant_id",
+   "fieldtype": "Data",
+   "label": "Flutterwave Merchant ID",
+   "reqd": 1
   }
  ],
  "links": [],
- "modified": "2021-02-07 06:32:41.567014",
+ "modified": "2021-02-07 20:53:43.929535",
  "modified_by": "Administrator",
  "module": "Flutterwave",
  "name": "Flutterwave Settings",
