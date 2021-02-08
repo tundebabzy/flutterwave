@@ -76,7 +76,6 @@ class FlutterwaveSettings(Document):
 			frappe.throw(Flutterwave.ctx.message)
 		else:
 			checkout_link = Flutterwave.ctx.data['link']
-			print('got a link -> ', Flutterwave.ctx.data, Flutterwave.ctx.message, Flutterwave.ctx.status)
 			self.make_log(identifier, slug, checkout_link)
 			return checkout_link
 
