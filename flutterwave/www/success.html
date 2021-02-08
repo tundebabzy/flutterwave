@@ -1,0 +1,13 @@
+{% extends "templates/web.html" %}
+
+{% set title = "Received" %}
+{% block header %}<h1>Payment confirmation</h1>{% endblock %}
+{% block page_sidebar %}
+{% include "templates/includes/web_sidebar.html" %}
+{% endblock %}
+{% block page_content %}
+
+<article class="about-content">
+	<p>We received your payment. Thank you.</p>
+</article>
+{% endblock %}

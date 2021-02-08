@@ -94,9 +94,8 @@ def payment_done(tx_ref=None, transaction_id=None, status=None):
 	else:
 		do_payment_done(tx_ref, transaction_id, status)
 		frappe.response['http_status_code'] = 200
-		return """
-		<p>Thank you. We have received your payment</p>
-		"""
+		frappe.response['type'] = 'redirect'
+		frappe.response.location = '/success'
 	return
 
 def do_payment_done(tx_ref, transaction_id, status):
