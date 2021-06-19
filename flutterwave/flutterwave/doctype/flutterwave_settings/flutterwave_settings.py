@@ -101,7 +101,7 @@ def payment_done(tx_ref=None, transaction_id=None, status=None):
 	else:
 		# purposely left empty as nobody is ever supposed to get to this branch
 		frappe.response['type'] = 'redirect'
-		frappe.response.location = '/message'		
+		frappe.response.location = '/thankyoufortrying'		
 	return
 
 def do_payment_done(tx_ref, transaction_id, status):
